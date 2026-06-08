@@ -144,9 +144,30 @@ class ClassificationController extends Controller
             ? 'Ya'
             : 'Tidak';
 
+        /*
+        |--------------------------------------------------------------------------
+        | PREDIKSI K-NN & C4.5
+        |--------------------------------------------------------------------------
+        */
+        $allTrainingData = Mahasiswa::all();
+        $testData = [
+            'ipk' => $request->ipk,
+            'kehadiran' => $request->kehadiran,
+            'sks_lulus' => $request->sks_lulus,
+            'status_kerja' => $request->status_kerja
+        ];
+
+        $knnService = new \App\Services\KnnService();
+        $knnResult = $knnService->predict($allTrainingData, $testData, 5); // K=5
+
+        $c45Service = new \App\Services\C45Service();
+        $c45Result = $c45Service->predict($allTrainingData, $testData);
+
         return redirect('/')
             ->with('prediction', $hasil)
             ->with('prob_ya', $probYa)
-            ->with('prob_tidak', $probTidak);
+            ->with('prob_tidak', $probTidak)
+            ->with('knn_result', $knnResult)
+            ->with('c45_result', $c45Result);
     }
 }

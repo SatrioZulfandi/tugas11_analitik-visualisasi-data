@@ -28,7 +28,7 @@
                     </h2>
 
                     <p class="mb-0">
-                        Implementasi Metode Klasifikasi Naive Bayes
+                        Implementasi Metode Naive Bayes, K-NN, dan C4.5
                     </p>
 
                 </div>
@@ -71,11 +71,11 @@
                                     </h6>
 
                                     <h3>
-                                        Naive Bayes
+                                        Multiple Models
                                     </h3>
 
                                     <small>
-                                        Classification
+                                        NB, K-NN, C4.5
                                     </small>
 
                                 </div>
@@ -198,7 +198,7 @@
 
                 <div class="card-footer text-center text-muted">
 
-                    Data Mining - Classification using Naive Bayes
+                    Data Mining - Classification (Naive Bayes, K-NN, C4.5)
 
                 </div>
 
@@ -224,40 +224,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
         html: `
             <div style="text-align:left;font-size:15px;">
+                <h5 class="fw-bold mb-3 border-bottom pb-2">Perbandingan Hasil Klasifikasi</h5>
 
-                <p>
-                    <strong>Status Kelulusan :</strong>
-                </p>
+                <!-- Naive Bayes -->
+                <div class="mb-3 p-3 bg-light rounded border">
+                    <h6 class="fw-bold text-primary">📊 Naive Bayes</h6>
+                    <h5 style="color: {{ session('prediction') == 'Ya' ? '#198754' : '#dc3545' }}">
+                        {{ session('prediction') == 'Ya' ? '✅ Lulus Tepat Waktu' : '❌ Tidak Lulus Tepat Waktu' }}
+                    </h5>
+                    <small>
+                        Probabilitas Ya: {{ round(session('prob_ya', 0) * 100, 2) }}% | 
+                        Tidak: {{ round(session('prob_tidak', 0) * 100, 2) }}%
+                    </small>
+                </div>
 
-                <h4 style="color:
-                {{ session('prediction') == 'Ya'
-                    ? '#198754'
-                    : '#dc3545' }}">
-                    {{ session('prediction') == 'Ya'
-                        ? '✅ Lulus Tepat Waktu'
-                        : '❌ Tidak Lulus Tepat Waktu' }}
-                </h4>
+                <!-- K-NN -->
+                <div class="mb-3 p-3 bg-light rounded border">
+                    <h6 class="fw-bold text-info">🎯 K-Nearest Neighbors (K=5)</h6>
+                    <h5 style="color: {{ session('knn_result')['prediction'] == 'Ya' ? '#198754' : '#dc3545' }}">
+                        {{ session('knn_result')['prediction'] == 'Ya' ? '✅ Lulus Tepat Waktu' : '❌ Tidak Lulus Tepat Waktu' }}
+                    </h5>
+                    <small>
+                        Voting: Ya ({{ session('knn_result')['votes_ya'] }}) | 
+                        Tidak ({{ session('knn_result')['votes_tidak'] }})
+                    </small>
+                </div>
 
-                <hr>
-
-                <p>
-                    Probabilitas Ya :
-                    <strong>
-                        {{ round(session('prob_ya',0) * 100,2) }}%
-                    </strong>
-                </p>
-
-                <p>
-                    Probabilitas Tidak :
-                    <strong>
-                        {{ round(session('prob_tidak',0) * 100,2) }}%
-                    </strong>
-                </p>
-
+                <!-- C4.5 Decision Tree -->
+                <div class="mb-3 p-3 bg-light rounded border">
+                    <h6 class="fw-bold text-success">🌳 Decision Tree (C4.5)</h6>
+                    <h5 style="color: {{ session('c45_result')['prediction'] == 'Ya' ? '#198754' : '#dc3545' }}">
+                        {{ session('c45_result')['prediction'] == 'Ya' ? '✅ Lulus Tepat Waktu' : '❌ Tidak Lulus Tepat Waktu' }}
+                    </h5>
+                    <small>
+                        Berdasarkan Information Gain & Entropy
+                    </small>
+                </div>
             </div>
         `,
 
-        width: 650,
+        width: 800,
         confirmButtonText: 'Tutup'
 
     });
